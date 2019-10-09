@@ -1,4 +1,4 @@
-package CNPM;
+package DAO;
 import java.sql.*;
 /**
  *
