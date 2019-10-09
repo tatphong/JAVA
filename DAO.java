@@ -81,7 +81,7 @@ public class JavaApplication1 {
     public static void main(String[] args) {
         String table="NHANVIEN";
         String select_target="*";
-        String condition="tenNV LIKE '%Tran%'";
+        String condition="tenNV LIKE '%Tran%'";//condition=null;
         String compare="sdt DESC";
         String insert_column="idNV,tenNV,sdt,ngaysinh,diachi";
         String insert_value="3,N'Tran Phu','0987632145','1997/10/04',N'123 Ly Thuong Kiet'";
@@ -89,6 +89,8 @@ public class JavaApplication1 {
 //        NhanVienDAO.insert(table,insert_column,insert_value);
         ResultSet res;
         res = DAO.sort(select_target,table,compare);
+        
+        //print result
         try {
             while (res.next()){
                 System.out.format("%d %s %s %s \n",res.getInt(1),res.getString(2),res.getString(3),res.getString(4));
