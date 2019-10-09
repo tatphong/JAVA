@@ -75,3 +75,26 @@ public class DAO {
         return res;
     }
 }
+
+//demo main running DAO
+public class JavaApplication1 {
+    public static void main(String[] args) {
+        String table="NHANVIEN";
+        String select_target="*";
+        String condition="tenNV LIKE '%Tran%'";
+        String compare="sdt DESC";
+        String insert_column="idNV,tenNV,sdt,ngaysinh,diachi";
+        String insert_value="3,N'Tran Phu','0987632145','1997/10/04',N'123 Ly Thuong Kiet'";
+        
+//        NhanVienDAO.insert(table,insert_column,insert_value);
+        ResultSet res;
+        res = NhanVienDAO.sort(select_target,table,compare);
+        try {
+            while (res.next()){
+                System.out.format("%d %s %s %s \n",res.getInt(1),res.getString(2),res.getString(3),res.getString(4));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(JavaApplication1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+}
