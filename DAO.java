@@ -88,7 +88,7 @@ public class JavaApplication1 {
         
 //        NhanVienDAO.insert(table,insert_column,insert_value);
         ResultSet res;
-        res = NhanVienDAO.sort(select_target,table,compare);
+        res = DAO.sort(select_target,table,compare);
         try {
             while (res.next()){
                 System.out.format("%d %s %s %s \n",res.getInt(1),res.getString(2),res.getString(3),res.getString(4));
