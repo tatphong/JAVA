@@ -1,0 +1,7 @@
+system;hệ thống
+money;tiền
+school; trường học
+car;xe
+tree;cây
+house;nhà
+people;người

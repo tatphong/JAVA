@@ -189,7 +189,7 @@ public class chinhsuamonann extends javax.swing.JFrame {
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         // TODO add your handling code here:
         boolean ktts=false;
-        if (jLabel1.getText().equals("Thêm món ăn")) {
+        if (jLabel1.getText().equals("Thêm món ăn")) { 
                     //JOptionPane.showMessageDialog(this, "OKEt");
                 ktts=true;
         } 

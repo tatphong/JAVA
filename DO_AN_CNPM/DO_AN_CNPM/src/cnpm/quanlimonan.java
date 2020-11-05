@@ -253,12 +253,14 @@ public class quanlimonan extends javax.swing.JFrame {
             if(loaimonannnn.equals("Đĩa"))
             {
                 z.setloai(0);
-            }else z.setloai(1);
+            }
+            else z.setloai(1);
             String hhh=(String) model.getValueAt(i,3);
             if(hhh.equals("Đồ ăn"))
             {
                 z.setjcombobox3(0);
-            }else z.setjcombobox3(1);
+            }
+            else z.setjcombobox3(1);
             
             
             int a=(int) model.getValueAt(i, 4);

@@ -1,0 +1,4 @@
+home;nhà
+nhà;house
+cây;tree
+people;người

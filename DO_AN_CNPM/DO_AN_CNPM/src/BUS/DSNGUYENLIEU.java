@@ -17,7 +17,7 @@ public class DSNGUYENLIEU
     public ArrayList<NGUYENLIEU> getList() {return this.list;}
     public void setList(ArrayList<NGUYENLIEU> list) {this.list = list;}
     
-    private void importDS()
+     private void importDS()
     {
         ResultSet res;
         res = DAO.select("*","NGUYENLIEU",null); //select * from NCC 
