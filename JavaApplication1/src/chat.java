@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
+import javax.swing.ListModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -47,7 +50,8 @@ public class chat extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        DefaultListModel model = new DefaultListModel();
+        jList1 = new javax.swing.JList(model);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 204));
@@ -65,7 +69,6 @@ public class chat extends javax.swing.JFrame {
 
         jTextField1.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jTextField1.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField1.setText("  Type your message here ");
         jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextField1FocusGained(evt);
@@ -135,11 +138,7 @@ public class chat extends javax.swing.JFrame {
             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jList1.setModel(model);
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jList1);
 
@@ -173,20 +172,34 @@ public class chat extends javax.swing.JFrame {
             jLabel1MouseClicked(null);
     }//GEN-LAST:event_jTextField1KeyPressed
 
+    public void push_up_text(String s){
+        DefaultListModel model = (DefaultListModel) jList1.getModel();
+        int size = model.getSize();
+        model.add(size, s);
+//        jList1.setModel(model);
+        this.doLayout();
+        jList1.ensureIndexIsVisible(size);
+    }
+    
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        String input = jTextField1.getText();
+//        clear text after send
+        jTextField1.setText("");
         String res = "";
-        try {
-            String input = jTextField1.getText();
-            res = sim.run(input);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        jTextField1.setText(res);
+        push_up_text(input);
+//        jList1.setModel(lm2);
+//        try {    
+//            res = sim.run(input);
+//        } catch (MalformedURLException ex) {
+//            Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        System.out.println(res);
+        push_up_text("ohlala");
+//        jList1.setModel(lm2);
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
         // TODO add your handling code here:
-        jTextField1.setText("");
         jLabel3.setText("Typing...");
     }//GEN-LAST:event_jTextField1FocusGained
 

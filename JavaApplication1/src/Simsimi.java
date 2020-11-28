@@ -24,19 +24,10 @@ import org.json.JSONObject;
  * @author tattr
  */
 public class Simsimi {
-    URL obj;
-    HttpURLConnection con;
+    
 
     public Simsimi() throws MalformedURLException, IOException {
-        this.obj = new URL("https://wsapi.simsimi.com/190410/talk");
-        this.con = (HttpURLConnection) obj.openConnection();
         
-//        Set property for connection
-        con.setRequestMethod("GET");
-//        con.setRequestProperty("User-Agent", "Mozilla");
-        con.setRequestProperty("Content-Type","application/json");
-        con.setRequestProperty("x-api-key","fRE84LxmAgatImNVsZxZ-.7hl1ehuJy7LBCZGRsC");
-        con.setDoOutput(true);
     }
     
     public String format_response(String output){
@@ -51,8 +42,17 @@ public class Simsimi {
     }
     
     public String run(String input) throws MalformedURLException{
-    try {
+        try {
             // TODO code application logic here
+//            Connect to server Simsimi, you to reconnect each request so i lay it here
+            URL obj = new URL("https://wsapi.simsimi.com/190410/talk");
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+//            Set property for connection
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Content-Type","application/json");
+            con.setRequestProperty("x-api-key","fRE84LxmAgatImNVsZxZ-.7hl1ehuJy7LBCZGRsC");
+            con.setDoOutput(true);
+
 //            Create output stream to simsimi
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
             wr.writeBytes("{\"utext\":\"" + input + "\", \"lang\":\"en\"}");
@@ -62,6 +62,8 @@ public class Simsimi {
 //            get response from simsimi
             int responseCode = con.getResponseCode();
             System.out.println("Response Code : " + responseCode);
+            if (responseCode == 228)
+                return "I don't understand";
             
             BufferedReader iny = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String output;
@@ -75,7 +77,7 @@ public class Simsimi {
             return format_response(response.toString());
         } catch (IOException ex) {
             Logger.getLogger(Simsimi.class.getName()).log(Level.SEVERE, null, ex);
-            return "DataStream, IOException";
+            return "";
         }
     }
 }
