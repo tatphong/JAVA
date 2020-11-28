@@ -33,12 +33,13 @@ public class TestCurl {
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             
             con.setRequestMethod("GET");
+//            con.setRequestProperty("User-Agent", "Mozilla");
             con.setRequestProperty("Content-Type","application/json");
-            con.setRequestProperty("x-api-key","RAYliHV~H3~hvTNYB-LCjbaSc6TgnBglWPnNLLa3");
+            con.setRequestProperty("x-api-key","fRE84LxmAgatImNVsZxZ-.7hl1ehuJy7LBCZGRsC");
 
             con.setDoOutput(true);
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes("{\"utext\":\"hello\", \"lang\":\"en\"}");
+            wr.writeBytes("{\"utext\":\"hi\", \"lang\":\"en\"}");
             wr.flush();
             wr.close();
             

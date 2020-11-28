@@ -979,6 +979,7 @@ public class order extends javax.swing.JFrame {
             menu.getColumnModel().getColumn(1).setMaxWidth(50);
         }
 
+        txtf__tongtien.setEditable(false);
         txtf__tongtien.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         txtf__tongtien.setText("                                                     0");
         txtf__tongtien.addActionListener(new java.awt.event.ActionListener() {

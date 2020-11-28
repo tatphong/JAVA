@@ -208,7 +208,7 @@ public class dangnhap extends javax.swing.JFrame {
                                 order z=new order();
                                 z.setLocationRelativeTo(null);
                                 z.setVisible(true);
-                                if(level==0)
+                                if(level==2)
                                 {
                                     tk="Thu ngân: "+tk;
                                 }else tk="Nhân viên: "+tk;
