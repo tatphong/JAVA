@@ -102,6 +102,14 @@ create table NGUYENLIEU(
 	donvitinh nvarchar(10)
 )
 
+create table CONGTHUCNAU(
+	id int primary key identity,
+	idMonAn int foreign key references MONAN(idMonAn),
+	idNL int foreign key references NGUYENLIEU(idNL),
+	khoiluong int,
+	donvitinh nvarchar (50)
+)
+
 create table PHIEUTHU(
 	idPT int primary key identity(1,1),
 	ngaythu date,
@@ -256,3 +264,8 @@ select CAST(HD.ngay AS DATE) NGAY, SUM(HD.tongtien) DOANH_THU from HOADON HD WHE
 
 --xuất doanh thu từng tháng trong năm	
 select month(ngay),sum(tongtien) from HOADON where month(ngay) in (select month(ngay) from HOADON WHERE YEAR(NGAY)=2019) group by month(ngay)
+
+CREATE PROCEDURE SelectAllCustomers @City nvarchar(30), @PostalCode nvarchar(10)
+AS
+SELECT * FROM Customers WHERE City = @City AND PostalCode = @PostalCode
+GO;

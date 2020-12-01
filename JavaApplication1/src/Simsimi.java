@@ -73,7 +73,8 @@ public class Simsimi {
                 response.append(output);
             }
             iny.close();
-            
+//            con.disconnect();
+            System.out.print(response);
             return format_response(response.toString());
         } catch (IOException ex) {
             Logger.getLogger(Simsimi.class.getName()).log(Level.SEVERE, null, ex);
