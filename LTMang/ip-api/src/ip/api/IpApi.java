@@ -21,13 +21,14 @@ public class IpApi {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
-        String ip = "8.8.8.8";
+        String ip = "210.5.1.1";
         Document doc = org.jsoup.Jsoup.connect("http://ip-api.com/json/"+ip)
                 .userAgent("Mozilla").ignoreContentType(true).get();
         String pre = doc.body().text();
         Type classOft = new TypeToken<ip>(){}.getType();
         Gson gson = new Gson();
         ip ip1 = gson.fromJson(pre, classOft);
+        System.out.println(ip1);
         System.out.println(ip1.getOrg());
     }
     
