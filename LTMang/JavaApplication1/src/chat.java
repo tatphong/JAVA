@@ -7,8 +7,12 @@ import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractListModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.ListModel;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -22,8 +26,11 @@ import org.jsoup.nodes.Document;
  *
  * @author ADMIN
  */
+
 public class chat extends javax.swing.JFrame {
     Simsimi sim;
+    HTMLEditorKit htmlKit;
+    HTMLDocument htmlDoc;
     /**
      * Creates new form chat
      */
@@ -35,6 +42,8 @@ public class chat extends javax.swing.JFrame {
         } catch (IOException ex) {
             jLabel3.setText("Connection Error!!!");
         }
+        MyCellRenderer cellRenderer = new MyCellRenderer(390);
+        jList1.setCellRenderer(cellRenderer);
     }
 
     @SuppressWarnings("unchecked")
@@ -59,6 +68,7 @@ public class chat extends javax.swing.JFrame {
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\Code\\JAVA\\LTMang\\JavaApplication1\\Asset 3.png")); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);
@@ -87,7 +97,7 @@ public class chat extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                .addComponent(jTextField1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -105,7 +115,9 @@ public class chat extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(0, 0, 153));
 
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setIcon(new javax.swing.ImageIcon("D:\\Code\\JAVA\\LTMang\\JavaApplication1\\Asset 5.png")); // NOI18N
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 17)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("AI Chat Bot");
 
@@ -116,23 +128,23 @@ public class chat extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jLabel2)
+                .addGap(21, 21, 21)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addContainerGap(19, Short.MAX_VALUE))
-            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jList1.setModel(model);
@@ -145,9 +157,9 @@ public class chat extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -155,7 +167,7 @@ public class chat extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -163,6 +175,26 @@ public class chat extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public String getWeather(String location)  {
+        String res = "";
+        try {    
+            String key = "4ca633b9d470650ea1ac927fdfe79ad3";
+            String namecity=location;
+            Document doc = org.jsoup.Jsoup.connect("http://api.openweathermap.org/data/2.5/weather?q="+namecity+"&appid="+key)
+                    .userAgent("Mozilla").ignoreContentType(true).get();
+            String pre = doc.body().text();
+            java.lang.reflect.Type classOft = new TypeToken<Example>(){}.getType();
+            Gson gson = new Gson();
+            Example ex = gson.fromJson(pre, classOft);
+            res = ex.thoitiet();
+            // độ ở đây là độ k ko phải độ c >>> chuyển thì trừ 273.15
+        } catch (IOException ex) {
+            res = "Sorry, this location does not exists in API";
+            Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return res;
+    }
+    
     public String get_dns_via_ip(String ip){
         Document doc = null;
         try {
@@ -182,11 +214,27 @@ public class chat extends javax.swing.JFrame {
     
     public String controller(String input){
         String res = "";
-        if (input.toLowerCase().startsWith("iplocation "))
+        if (input.toLowerCase().equals("help"))
+        {
+            res = "<html>weather {city}<br/> iplocation {ip address}<br/> check port {ip} from {x} to {y}</html>";
+        }
+        else if (input.toLowerCase().startsWith("weather "))
+        {
+            String location = input.split("weather ")[1];
+            res = getWeather(location);
+        } 
+        else if (input.toLowerCase().startsWith("iplocation "))
         {
             String ip = input.split("iplocation ")[1];
             res = get_dns_via_ip(ip);
         }  
+        else if (input.toLowerCase().startsWith("check port "))
+        {
+            String ip = input.split("check port ")[1];
+            String begin = (input.split("from ")[1]).split(" to")[0];
+            String end = input.split("to ")[1];
+            res = new PortScanner().check_port(ip, Integer.parseInt(begin), Integer.parseInt(end));
+        }
         else
         {
             try {    
@@ -204,6 +252,7 @@ public class chat extends javax.swing.JFrame {
         int size = model.getSize();
         model.add(size, s);
 //        jList1.setModel(model);
+        System.out.println(s);
         this.doLayout();
         jList1.ensureIndexIsVisible(size);
     }
