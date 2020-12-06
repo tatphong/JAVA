@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package test_multithread;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -18,18 +17,15 @@ import java.util.logging.Logger;
  *
  * @author tattr
  */
-public class Server_UDP {
+public class Server {
 
-    /**
-     * @param args the command line arguments
-     */
-    int id = 1;
+    static int id = 1;
     
     public static void main(String[] args) {
-            // TODO code application logic here
         ExecutorService executor = Executors.newFixedThreadPool(10);
-        
-        Runnable worker = new MyRunner(id);
+        Runnable worker;
+        worker = new MyRunner(id);
+        id++;
         executor.execute(worker);
         
     }

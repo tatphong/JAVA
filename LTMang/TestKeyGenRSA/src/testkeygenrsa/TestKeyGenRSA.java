@@ -37,6 +37,7 @@ public class TestKeyGenRSA {
             byte[] input = "Welcome to RSA".getBytes();	  
             cipher.update(input);
             byte[] cipherText = cipher.doFinal();
+            System.out.println(pair.getPublic());
             System.out.println(new String(cipherText, "UTF8"));
             
 //descryption
