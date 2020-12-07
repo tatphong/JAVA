@@ -13,22 +13,18 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.MalformedURLException;
 import java.net.SocketException;
-import java.security.InvalidKeyException;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.*;
+import javax.crypto.spec.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 /**
  *
@@ -37,10 +33,25 @@ import org.jsoup.nodes.Document;
 public class MyRunner implements Runnable{
     Simsimi sim;
     int id = 0;
-    KeyPair keypair;
-    Cipher cipher;
-    Cipher des_cipher;
-    PublicKey client_public_key;
+    public static final String DEFAULT_ENCODING = "UTF-8"; 
+    static BASE64Encoder enc = new BASE64Encoder();
+    static BASE64Decoder dec = new BASE64Decoder();
+
+    public static String base64encode(String text) {
+        try {
+            return enc.encode(text.getBytes(DEFAULT_ENCODING));
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
+    }//base64encode
+
+    public static String base64decode(String text) {
+        try {
+            return new String(dec.decodeBuffer(text), DEFAULT_ENCODING);
+        } catch (IOException e) {
+            return null;
+        }
+    }//base64decode
     
     public MyRunner(int id){
         this.id = id;
@@ -49,56 +60,6 @@ public class MyRunner implements Runnable{
         } catch (IOException ex) {
             Logger.getLogger("Init Simsimi error: "+MyRunner.class.getName()).log(Level.SEVERE, null, ex);
         }
-        key_gen_RSA();
-    }
-    
-    private void key_gen_RSA(){
-        try {
-            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
-            keyPairGen.initialize(2048);
-            keypair = keyPairGen.generateKeyPair();
-            PublicKey publicKey = keypair.getPublic();
-            cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-        //descryption
-            des_cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            des_cipher.init(Cipher.DECRYPT_MODE, keypair.getPrivate());
-            
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(MyRunner.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex) {
-            Logger.getLogger(MyRunner.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex) {
-            Logger.getLogger(MyRunner.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private byte[] encrypt(String input){
-        byte[] s = input.getBytes();
-        cipher.update(s);
-        try {
-            return cipher.doFinal();
-        } catch (IllegalBlockSizeException ex) {
-            Logger.getLogger("Encrypt error: "+MyRunner.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex) {
-            Logger.getLogger("Encrypt error: "+MyRunner.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-    
-    private String decrypt(String input){
-        byte[] s = input.getBytes();
-        des_cipher.update(s);
-        try {
-            return new String(des_cipher.doFinal(), "UTF8");
-        } catch (IllegalBlockSizeException ex) {
-            Logger.getLogger("Decrypt error: "+MyRunner.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex) {
-            Logger.getLogger("Decrypt error: "+MyRunner.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger("Decrypt error: "+MyRunner.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
     }
     
     public String getWeather(String location)  {
@@ -182,22 +143,10 @@ public class MyRunner implements Runnable{
         try {
             socket = new DatagramSocket(1234);
             dpreceive = new DatagramPacket(new byte[buffersize], buffersize);
-            
-            //exchange public key with server
-            dpreceive = new DatagramPacket(new byte[2048], 2048);
-            socket.receive(dpreceive);
-            dpsend = new DatagramPacket(keypair.getPublic().getEncoded(), keypair.getPublic().getEncoded().length, dpreceive.getAddress(), dpreceive.getPort());
-            socket.send(dpsend);
-            //transfer byte back to key
-            byte[] server_key_byte = dpreceive.getData();
-            System.out.println(server_key_byte);
-            X509EncodedKeySpec ks = new X509EncodedKeySpec(server_key_byte);
-            KeyFactory kf = KeyFactory.getInstance("RSA");
-            client_public_key = kf.generatePublic(ks);
-            
+
             while (true){
                 socket.receive(dpreceive);
-                String temp = decrypt(new String(dpreceive.getData(), 0, dpreceive.getLength()));
+                String temp = base64decode(new String(dpreceive.getData(), 0, dpreceive.getLength(), "UTF8"));
                 System.out.println("Server receive: "+ temp +" from "+dpreceive.getAddress().getHostAddress()+ " at port "+socket.getLocalPort());
 //                if (temp.equals("bye")){
 //                    System.out.println("Server socket closed");
@@ -205,8 +154,9 @@ public class MyRunner implements Runnable{
 //                    break;
 //                }
                 temp = controller(temp);
-                dpsend = new DatagramPacket(temp.getBytes(), temp.getBytes().length, dpreceive.getAddress(), dpreceive.getPort());
                 System.out.println("Server send back: "+ temp + " to client");
+                byte[] data = base64encode(temp).getBytes();
+                dpsend = new DatagramPacket(data, data.length, dpreceive.getAddress(), dpreceive.getPort());
                 socket.send(dpsend);
                 
             }
@@ -215,12 +165,7 @@ public class MyRunner implements Runnable{
             Logger.getLogger(MyRunner.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(MyRunner.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(MyRunner.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
-            Logger.getLogger(MyRunner.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
     
 }

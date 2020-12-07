@@ -19,15 +19,15 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
+import javax.crypto.*;
+import javax.crypto.spec.*;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 /**
  *
  * @author tattr
@@ -39,78 +39,30 @@ public class LTM_Client {
     DatagramSocket socket;
     DatagramPacket dpsend, dpreceive;
     InetAddress add;
-    KeyPair keypair;
-    Cipher cipher;
-    Cipher des_cipher;
-    PublicKey server_public_key;
-    
-    private void key_gen_RSA(){
+    public static final String DEFAULT_ENCODING = "UTF-8"; 
+    static BASE64Encoder enc = new BASE64Encoder();
+    static BASE64Decoder dec = new BASE64Decoder();
+
+    public static String base64encode(String text) {
         try {
-            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
-            keyPairGen.initialize(2048);
-            keypair = keyPairGen.generateKeyPair();
-            PublicKey publicKey = keypair.getPublic();
-            cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-        //descryption
-            des_cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            des_cipher.init(Cipher.DECRYPT_MODE, keypair.getPrivate());
-            
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex) {
-            Logger.getLogger(LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex) {
-            Logger.getLogger(LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
+            return enc.encode(text.getBytes(DEFAULT_ENCODING));
+        } catch (UnsupportedEncodingException e) {
+            return null;
         }
-    }
-    
-    private byte[] encrypt(String input){
-        byte[] s = input.getBytes();
-        cipher.update(s);
+    }//base64encode
+
+    public static String base64decode(String text) {
         try {
-            return cipher.doFinal();
-        } catch (IllegalBlockSizeException ex) {
-            Logger.getLogger("Encrypt error: "+LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex) {
-            Logger.getLogger("Encrypt error: "+LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
+            return new String(dec.decodeBuffer(text), DEFAULT_ENCODING);
+        } catch (IOException e) {
+            return null;
         }
-        return null;
-    }
-    
-    private String decrypt(String input){
-        byte[] s = input.getBytes();
-        des_cipher.update(s);
-        try {
-            return new String(des_cipher.doFinal(), "UTF8");
-        } catch (IllegalBlockSizeException ex) {
-            Logger.getLogger("Decrypt error: "+LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex) {
-            Logger.getLogger("Decrypt error: "+LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "";
-    }
+    }//base64decode
     
     public String connect(){
-        key_gen_RSA();
         try {
             add = InetAddress.getByName(hostname);	//UnknownHostException
             socket = new DatagramSocket();			//SocketException
-            
-            //exchange public key with server
-            dpsend = new DatagramPacket(keypair.getPublic().getEncoded(), keypair.getPublic().getEncoded().length, add, destPort);
-            socket.send(dpsend);
-            dpreceive = new DatagramPacket(new byte[2048], 2048);
-            socket.receive(dpreceive);
-            //transfer byte back to key
-            byte[] server_key_byte = dpreceive.getData();
-            System.out.println(server_key_byte);
-            X509EncodedKeySpec ks = new X509EncodedKeySpec(server_key_byte);
-            KeyFactory kf = KeyFactory.getInstance("RSA");
-            server_public_key = kf.generatePublic(ks);
-            
             return "Connected";
         } catch (UnknownHostException ex) {
             Logger.getLogger("host false: "+LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -118,10 +70,6 @@ public class LTM_Client {
             Logger.getLogger("socket false: "+LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger("send public key false: "+LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
-            Logger.getLogger(LTM_Client.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "Error connection";
     }
@@ -129,7 +77,7 @@ public class LTM_Client {
     public String run(String input) {
         // TODO code application logic here
         try {
-            byte[] data = input.getBytes();
+            byte[] data = base64encode(input).getBytes();
             dpsend = new DatagramPacket(data, data.length, add, destPort);
             System.out.println("Client sent " + input + " to " + add.getHostAddress() + 
                             " from port " + socket.getLocalPort());
@@ -138,7 +86,7 @@ public class LTM_Client {
             // Get response from server
             dpreceive = new DatagramPacket(new byte[512], 512);
             socket.receive(dpreceive);
-            input = new String(dpreceive.getData(), 0, dpreceive.getLength());
+            input = base64decode(new String(dpreceive.getData(), 0, dpreceive.getLength(), "UTF8"));
             System.out.println("Client get: " + input);
         } catch (IOException e) { System.err.println(e);}
         return input;
