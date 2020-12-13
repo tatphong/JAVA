@@ -36,7 +36,7 @@ public class chat extends javax.swing.JFrame {
         initComponents();
         connection_core = new LTM_Client();
         jLabel3.setText(connection_core.connect());
-        MyCellRenderer cellRenderer = new MyCellRenderer(390);
+        MyCellRenderer cellRenderer = new MyCellRenderer(380);
         jList1.setCellRenderer(cellRenderer);
     }
 
@@ -69,7 +69,7 @@ public class chat extends javax.swing.JFrame {
             }
         });
 
-        jTextField1.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        jTextField1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jTextField1.setForeground(new java.awt.Color(102, 102, 102));
         jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -234,7 +234,9 @@ public class chat extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new chat().setVisible(true);
+                chat c = new chat();
+                c.setVisible(true);
+                c.setLocationRelativeTo(null);
             }
         });
     }

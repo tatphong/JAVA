@@ -82,9 +82,15 @@ this.humidity = humidity;
 //        return "Main{" + "temp=" + temp + ", feelsLike=" + feelsLike + ", tempMin=" + tempMin + ", tempMax=" + tempMax + ", pressure=" + pressure + ", humidity=" + humidity + '}';
 //    }
 
-    @Override
-    public String toString() {
-        return " temp=" + temp + ", feelsLike=" + feelsLike + ", tempMin=" + tempMin + ", tempMax=" + tempMax + ", pressure=" + pressure + ", humidity=" + humidity;
+    private float exchangeK2C(float temper){
+        return (float) (Math.round((temper*1.0 - 273.15)*10.0)/10.0); //Công thức C=K-273.15 nhưng cần làm tròn 1 chữ số thập phân nên viết vậy
     }
 
+    @Override
+    public String toString() {
+        return " temp=" + exchangeK2C(temp) + "C, feelsLike=" + exchangeK2C(feelsLike) 
+            + "C<br/>tempMin=" + exchangeK2C(tempMin) + "C, tempMax=" + exchangeK2C(tempMax)
+            + "C<br/> pressure=" + pressure + ", humidity=" + humidity;
+    }
+    
 }

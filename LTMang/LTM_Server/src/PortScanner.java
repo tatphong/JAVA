@@ -44,9 +44,9 @@ public class PortScanner {
         String res = "";
         String dns = get_dns_via_ip(ip);
         
-        //check that port is valid
+        //check port is valid
         if(begin <= 1||end >= 65535 || end< begin)
-            return "Port sai";
+            return "Invalid port number";
 
         for (int port = begin; port <= end; port++) {
             try {

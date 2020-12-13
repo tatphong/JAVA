@@ -7,6 +7,7 @@
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.sun.xml.internal.ws.util.StringUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
@@ -17,11 +18,13 @@ import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 import org.jsoup.Jsoup;
+import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Document;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -99,27 +102,67 @@ public class MyRunner implements Runnable{
         return res;
     }
     
+    public boolean cleaned_IP(String ip){
+        StringTokenizer data = new StringTokenizer(ip, ".");
+        if (data.countTokens()!=4)                                      //kiểm tra ip có đúng 4 cụm, nhiều hơn hay thiếu đều sai
+            return false;
+        while (data.hasMoreTokens()){
+            String current_token = data.nextToken();
+            if (!StringUtil.isNumeric(current_token))                   // kiểm tra coi phải số hay không
+                return false;
+            int temp = Integer.parseInt(current_token);
+            if (temp < 0 || temp > 254)                                 // ip hợp lệ phải nằm trong khoảng từ 0 tới 254
+                return false;
+        }
+        return true;
+    }
+    
+    public boolean cleaned_input(String input, int numWord, boolean exceedNumWord){ // exceedNumWord true nghĩa là cho phép nhìu hơn số từ quy định
+        StringTokenizer data = new StringTokenizer(input, " ");
+        if (exceedNumWord){
+            if (data.countTokens()>=numWord)
+                return true;
+        }
+        else{
+            if (data.countTokens() == numWord)
+                return true;
+        }
+        return false;
+    }
+    
     public String controller(String input){
         String res = "";
         if (input.toLowerCase().equals("help"))
         {
-            res = "<html>weather {city}<br/> iplocation {ip address}<br/> check port {ip} from {x} to {y}</html>";
+            res = "weather {city}<br/> iplocation {ip address}<br/> check port {ip} from {x} to {y}";
         }
         else if (input.toLowerCase().startsWith("weather "))
         {
+            if (!cleaned_input(input, 2, true))
+                return "Missing location param in weather syntax";
             String location = input.split("weather ")[1];
             res = getWeather(location);
         } 
         else if (input.toLowerCase().startsWith("iplocation "))
         {
+            if (!cleaned_input(input, 2, false))
+                return "Iplocation syntax error";
             String ip = input.split("iplocation ")[1];
+            if (!cleaned_IP(ip))
+                return "Invalid Ip address";
             res = get_dns_via_ip(ip);
         }  
         else if (input.toLowerCase().startsWith("check port "))
         {
-            String ip = input.split("check port ")[1];
+            if (!cleaned_input(input, 7, false))
+                return "CheckPort syntax error";
+            String ip = input.split("check port ")[1].split(" from")[0];
+            if (!cleaned_IP(ip))
+                return "Invalid Ip address";
             String begin = (input.split("from ")[1]).split(" to")[0];
             String end = input.split("to ")[1];
+            if (!StringUtil.isNumeric(begin) || !StringUtil.isNumeric(end))
+                return "Port must be numeric";
             res = new PortScanner().check_port(ip, Integer.parseInt(begin), Integer.parseInt(end));
         }
         else

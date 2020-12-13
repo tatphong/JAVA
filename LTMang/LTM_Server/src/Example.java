@@ -51,7 +51,7 @@ this.wind = wind;
     
     public String thoitiet(){
         String res = "";
-        res = weather + "," + main;
+        res = weather + "<br/>" + main;
         return res;
     }
 
