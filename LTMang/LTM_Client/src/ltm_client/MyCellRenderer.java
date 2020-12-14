@@ -16,10 +16,10 @@ import javax.swing.JList;
  * @author tattr
  */
 class MyCellRenderer extends DefaultListCellRenderer {
-    public static final String HTML_1 = "<html><body style='font-size:14px; width: ";
-    public static final String HTML_2 = "px; text-align:left; color:white; background-color:gray'><strong>";
+    public static final String HTML_1 = "<html><body style='font-size:12px; padding-bottom:5px; padding-top:5px; width: ";
+    public static final String HTML_2 = "px; text-align:left; margin-bottom:2px; padding-left:10px; padding-top: 5px; padding-bottom:5px; color:white; background-color:gray'><strong>";
 //    public static final String HTML_22 = "px;'><div style='width:min-content; float:right; margin-left:100px; text-align:right; color:white; background-color:blue'>";
-    public static final String HTML_22 = "px;'><div style='width:100%; margin-left:100px; color:white; background-color:blue; text-align:right'><strong>";
+    public static final String HTML_22 = "px;'><div style='width:100%; margin-bottom:2px; padding-right:10px; padding-top: 5px; padding-bottom:5px; margin-left:100px; color:white; background-color:blue; text-align:right'><strong>";
     public static final String HTML_3 = "</strong></html>";
     public static final String HTML_33 = "</strong></div></html>";
     private int width;

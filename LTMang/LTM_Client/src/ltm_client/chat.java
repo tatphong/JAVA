@@ -36,7 +36,7 @@ public class chat extends javax.swing.JFrame {
         initComponents();
         connection_core = new LTM_Client();
         jLabel3.setText(connection_core.connect());
-        MyCellRenderer cellRenderer = new MyCellRenderer(380);
+        MyCellRenderer cellRenderer = new MyCellRenderer(390);
         jList1.setCellRenderer(cellRenderer);
     }
 

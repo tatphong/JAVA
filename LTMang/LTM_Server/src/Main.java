@@ -88,9 +88,9 @@ this.humidity = humidity;
 
     @Override
     public String toString() {
-        return " temp=" + exchangeK2C(temp) + "C, feelsLike=" + exchangeK2C(feelsLike) 
-            + "C<br/>tempMin=" + exchangeK2C(tempMin) + "C, tempMax=" + exchangeK2C(tempMax)
-            + "C<br/> pressure=" + pressure + ", humidity=" + humidity;
+        return " Temp = " + exchangeK2C(temp) + "C, Feels Like = " + exchangeK2C(feelsLike) 
+            + "C<br/>Temp Min = " + exchangeK2C(tempMin) + "C, Temp Max = " + exchangeK2C(tempMax)
+            + "C<br/> Pressure = " + pressure + ", Humidity = " + humidity;
     }
     
 }

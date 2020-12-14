@@ -50,7 +50,7 @@ public class Simsimi {
 //            Set property for connection
             con.setRequestMethod("GET");
             con.setRequestProperty("Content-Type","application/json");
-            con.setRequestProperty("x-api-key","fRE84LxmAgatImNVsZxZ-.7hl1ehuJy7LBCZGRsC");
+            con.setRequestProperty("x-api-key","NJn4q39LMRBih_Ia.meH6JDIrnS5Hbcv2sPrBa~u");
             con.setDoOutput(true);
 
 //            Create output stream to simsimi

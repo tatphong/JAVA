@@ -77,7 +77,6 @@ public class MyRunner implements Runnable{
             Gson gson = new Gson();
             Example ex = gson.fromJson(pre, classOft);
             res = ex.thoitiet();
-            // độ ở đây là độ k ko phải độ c >>> chuyển thì trừ 273.15
         } catch (IOException ex) {
             res = "Sorry, this location does not exists in API";
             Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
