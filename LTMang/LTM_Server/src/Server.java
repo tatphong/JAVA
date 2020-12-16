@@ -22,7 +22,7 @@ public class Server {
     static int id = 1;
     
     public static void main(String[] args) {
-        ExecutorService executor = Executors.newFixedThreadPool(3);
+        ExecutorService executor = Executors.newFixedThreadPool(10);
         Runnable worker;
         worker = new MyRunner(id);
         id++;
