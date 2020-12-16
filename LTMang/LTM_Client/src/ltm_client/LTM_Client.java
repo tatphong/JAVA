@@ -86,6 +86,7 @@ public class LTM_Client {
             // Get response from server
             dpreceive = new DatagramPacket(new byte[512], 512);
             socket.receive(dpreceive);
+            //System.out.println("Encrypted from server: "+new String(dpreceive.getData(), 0, dpreceive.getLength(), "UTF8")); // hiện đoạn đã mã hóa
             input = base64decode(new String(dpreceive.getData(), 0, dpreceive.getLength(), "UTF8"));
             System.out.println("Client get: " + input);
         } catch (IOException e) { System.err.println(e);}
