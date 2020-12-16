@@ -7,7 +7,6 @@
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sun.xml.internal.ws.util.StringUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
@@ -79,7 +78,7 @@ public class MyRunner implements Runnable{
             res = ex.thoitiet();
         } catch (IOException ex) {
             res = "Sorry, this location does not exists in API";
-            Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
         }
         return res;
     }

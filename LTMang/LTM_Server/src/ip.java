@@ -163,6 +163,9 @@ public class ip {
     }
 
     public String getLocation(){
+        if (this.getCountry()==null)
+            return "This ip does not exists";
+            
         return this.getCountry()+" ("+getLat()+", "+getLon()+")";
     }
     
