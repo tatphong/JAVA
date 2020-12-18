@@ -35,7 +35,7 @@ import sun.misc.BASE64Encoder;
 public class LTM_Client {
     
     int destPort = 1234;
-    String hostname = "localhost";
+    String hostname = "172.20.10.14";
     DatagramSocket socket;
     DatagramPacket dpsend, dpreceive;
     InetAddress add;
